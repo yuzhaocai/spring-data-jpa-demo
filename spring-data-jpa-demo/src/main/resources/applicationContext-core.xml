@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<!-- 开始spring的注解得支持 -->
+	<context:annotation-config></context:annotation-config>
+	
+	<!-- 开启spring对service层注解得扫描 -->
+	<context:component-scan base-package="service"></context:component-scan>
+	
+	<!-- 启动扫描并自动创建代理 -->
+	<jpa:repositories base-package="repository" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" repository-impl-postfix="Impl" query-lookup-strategy="create-if-not-found"></jpa:repositories>
+	
+	<!-- spring常量配置文件扫描 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:dataSource.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- dataSource配置 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	
+	<!-- hibernate对JPA的实现 -->
+	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean>
+	
+	<!-- spinrg整合JPA,可以完全取代类路径下META-INF目录中persistence.xml文件的配置 -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"></property>
+		<property name="persistenceXmlLocation" value="classpath*:META-INF/persistence.xml"></property>
+		<property name="persistenceUnitName" value="hibernatePersistenceUnit"></property>
+	</bean>
+	
+	<!-- JPA事务管理器(每种持久化技术都需要自己的独立的事务管理器) -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
+	</bean>
+	
+	<!-- 开启spring注解事务支持,proxy-target-class为true,表示基于类来创建代理对象，要求@Transactional注解必须标注在类上 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+	
+</beans>

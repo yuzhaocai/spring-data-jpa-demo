@@ -1,0 +1,148 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.class8</groupId>
+  <artifactId>spring-cache</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>spring-cache Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+  	<!-- dependency version -->
+  	<spring.version>4.2.0.RELEASE</spring.version>
+  	<spring-data-jpa.version>1.9.4.RELEASE</spring-data-jpa.version>
+  	<junit.version>4.12</junit.version>
+  	<hibernate.version>5.1.0.Final</hibernate.version>
+  	<commons-dbcp.version>1.4</commons-dbcp.version>
+  	<mysql-connector-java.version>5.1.8</mysql-connector-java.version>
+  	
+  	<!-- plugin constant -->
+  	<java.version>1.7</java.version>
+  	
+  </properties>
+  
+  <dependencies>
+  	<!-- spring-context -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-context</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	
+  	<!-- spring-orm -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-orm</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	
+  	<!-- spring-webmvc -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-webmvc</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	
+  	<!-- spring-test -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-test</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	
+  	<!-- spring-data-jpa -->
+  	<dependency>
+  		<groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-jpa</artifactId>
+  		<version>${spring-data-jpa.version}</version>
+  	</dependency>
+  	
+  	<!-- hibernate-core -->
+  	<dependency>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-core</artifactId>
+  		<version>${hibernate.version}</version>
+  	</dependency>
+  	
+  	<!-- hibernate-entitymanager -->
+  	<dependency>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-entitymanager</artifactId>
+  		<version>${hibernate.version}</version>
+  	</dependency>
+  	
+  	<!-- common-dbcp -->
+  	<dependency>
+  		<groupId>commons-dbcp</groupId>
+  		<artifactId>commons-dbcp</artifactId>
+  		<version>${commons-dbcp.version}</version>
+  	</dependency>
+  	
+  	<!-- mysal-connector-java -->
+  	<dependency>
+  		<groupId>mysql</groupId>
+  		<artifactId>mysql-connector-java</artifactId>
+  		<version>${mysql-connector-java.version}</version>
+  	</dependency>
+  	
+  	<!-- junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+  <build>
+    <finalName>spring-cache</finalName>
+    <plugins>
+    	<!-- compiler插件，设定java版本 -->
+    	<plugin>
+    		<groupId>org.apache.maven.plugins</groupId>
+    		<artifactId>maven-compiler-plugin</artifactId>
+    		<version>2.5.1</version>
+    		<configuration>
+    			<source>${java.version}</source>
+    			<target>${java.version}</target>
+    			<showWarnings>true</showWarnings>
+    		</configuration>
+    	</plugin>
+    	
+    	<!-- war插件，设定war包不带版本号 -->
+    	<plugin>
+    		<groupId>org.apache.maven.plugins</groupId>
+    		<artifactId>maven-war-plugin</artifactId>
+    		<version>2.3</version>
+    		<configuration>
+    			<warName>${project.artifactId}</warName>
+    		</configuration>
+    	</plugin>
+    	
+    	<!-- 配置jetty插件 -->
+    	<plugin>
+    		<groupId>org.mortbay.jetty</groupId>
+    		<artifactId>maven-jetty-plugin</artifactId>
+    		<version>6.1.26</version>
+    		<configuration>
+    			<!-- 解决启动jetty的时候不能修改WEB-INF目录下的文件 -->
+    			<webDefaultXml>src/main/resources/jetty/webdefault.xml</webDefaultXml>
+    			<!-- 指定webapp目录 -->
+    			<webAppSourceDirectory>src/main/webapp</webAppSourceDirectory>
+    			<!-- 扫描周期 -->
+    			<scanIntervalSeconds>3</scanIntervalSeconds>
+    			<!-- 项目的访问路径 -->
+    			<contextPath>/${project.aritifactId}</contextPath>
+    			<!-- 设定jetty的端口 -->
+    			<connectors>
+    				<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+    					<!-- 默认端口为8080 -->
+    					<port>8088</port>
+    				</connector>
+    			</connectors>
+    		</configuration>
+    	</plugin>
+    </plugins>
+  </build>
+</project>

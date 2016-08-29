@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0"> 
+	 <persistence-unit name="hibernatePersistenceUnit" transaction-type="RESOURCE_LOCAL"> 
+		 <provider>org.hibernate.ejb.HibernatePersistence</provider> 
+		 <class>entity.Person</class>
+		 <class>entity.OneToOne.Address</class>
+		 <class>entity.OneToOne.Student</class> 
+		 <properties> 
+			 <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/> 
+			 <property name="hibernate.show_sql" value="true"/> 
+			 <property name="hibernate.format_sql" value="true"/> 
+			 <property name="hibernate.use_sql_comments" value="false"/> 
+			 <property name="hibernate.hbm2ddl.auto" value="update"/> 
+		 </properties> 
+	 </persistence-unit> 
+ </persistence>
